@@ -6,5 +6,6 @@ namespace FileConverter.Data
     public interface IFileReader : ITypeRegistration
     {
         object Read(Stream fileStream);
+
     }
 }
