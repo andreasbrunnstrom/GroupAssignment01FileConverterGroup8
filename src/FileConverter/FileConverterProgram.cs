@@ -37,6 +37,9 @@ namespace FileConverter
                 List<IFileHandler> handlers = new List<IFileHandler>();
                 {
                     new HandleCSV();
+                    new HandleBIN();
+                    new HandleJSON();
+                    new HandleXML();
                 }
                 foreach (var handler in handlers)
                 {

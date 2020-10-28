@@ -1,9 +1,7 @@
 ﻿using FileConverter.Models;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace FileConverter.Data
 {
@@ -31,9 +29,9 @@ namespace FileConverter.Data
         public void Write(Stream stream, object data)
         {
             using (StreamWriter writer = new StreamWriter(stream))
-                using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
+            using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
-                JsonSerializer ser = new JsonSerializer();
+                JsonSerializer ser = new JsonSerializer();                
                 ser.Serialize(jsonWriter, data);
                 jsonWriter.Flush();
             }
