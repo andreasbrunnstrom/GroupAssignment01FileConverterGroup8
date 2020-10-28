@@ -29,7 +29,9 @@ namespace FileConverter.Data
                     productData.AvailableFrom = Convert.ToDateTime(columns[3]);
 
                     if (columns[4] != "")
+                    {
                         productData.AvailableUntil = Convert.ToDateTime(columns[4]);
+                    }
 
                     productData.UnitPrice.Amount = Convert.ToDouble(columns[5]);
 
