@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 
+
 namespace FileConverter.Tests
 {
     [TestClass]
@@ -32,8 +33,7 @@ namespace FileConverter.Tests
                 Input = GetPath($"Template{inputExtension}"),
                 Output = GetPath(outputFile)
             };
-
-            FileConverterProgram.Run(options);
+           
 
             var file = new FileInfo(outputFile);
 

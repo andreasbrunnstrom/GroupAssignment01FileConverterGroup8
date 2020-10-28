@@ -6,5 +6,6 @@ namespace FileConverter.Data
     public interface IFileWriter : ITypeRegistration
     {
         void Write(Stream stream, object data);
+
     }
 }
