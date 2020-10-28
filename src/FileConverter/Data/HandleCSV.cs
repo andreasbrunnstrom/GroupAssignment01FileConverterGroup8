@@ -33,7 +33,7 @@ namespace FileConverter.Data
                         productData.AvailableUntil = Convert.ToDateTime(columns[4]);
                     }
 
-                    productData.UnitPrice.Amount = Convert.ToDouble(columns[5]);
+                    productData.UnitPrice.Amount = Convert.ToDecimal(columns[5]);
 
                     List<string> markets = columns[6].Split(',').ToList();
                     productData.AvailableInMarkets.AddRange(markets);
@@ -41,11 +41,11 @@ namespace FileConverter.Data
                     List<string> sizes = columns[7].Split(',').ToList();
                     productData.Sizes.AddRange(sizes);
 
-                    productData.Properties.Add(new Property { Name = "Description", Value = columns[8] });
-                    productData.Properties.Add(new Property { Name = "DelieveryNote", Value = columns[9] });
-                    productData.Properties.Add(new Property { Name = "DelieveryFromDays", Value = columns[10] });
-                    productData.Properties.Add(new Property { Name = "DelieveryToDays", Value = columns[11] });
-                    productData.Properties.Add(new Property { Name = "ProductSoldOut", Value = columns[12] });
+                    productData.Properties.Add(new PropertyData { Name = "Description", Value = columns[8] });
+                    productData.Properties.Add(new PropertyData { Name = "DelieveryNote", Value = columns[9] });
+                    productData.Properties.Add(new PropertyData { Name = "DelieveryFromDays", Value = columns[10] });
+                    productData.Properties.Add(new PropertyData { Name = "DelieveryToDays", Value = columns[11] });
+                    productData.Properties.Add(new PropertyData { Name = "ProductSoldOut", Value = columns[12] });
 
                     products.Add(productData);
                 }
@@ -65,9 +65,9 @@ namespace FileConverter.Data
                     string markets = string.Join(',', product.AvailableInMarkets);
                     string sizes = string.Join(',', product.Sizes);
                     List<string> props = new List<string>();
-                    foreach (Property prop in product.Properties)
+                    foreach (PropertyData prop in product.Properties)
                     {
-                        props.Add(prop.Value);
+                        props.Add(prop.Value.ToString());
                     }
                     string properties = string.Join(';', props);
                     var line = $"{product.Id};{product.Name};{product.DisplayName};" +
