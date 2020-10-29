@@ -17,7 +17,7 @@ namespace FileConverter.Data
                 using (JsonTextReader jsonReader = new JsonTextReader(reader))
                 {
                     JsonSerializer ser = new JsonSerializer();
-                    return ser.Deserialize<List<ProductData>>(jsonReader); // Need to add Indented somehow
+                    return ser.Deserialize<List<ProductData>>(jsonReader);
                 }
             }
             catch
@@ -31,6 +31,7 @@ namespace FileConverter.Data
             using (StreamWriter writer = new StreamWriter(stream))
             using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
+                jsonWriter.Formatting = Formatting.Indented;
                 JsonSerializer ser = new JsonSerializer();                
                 ser.Serialize(jsonWriter, data);
                 jsonWriter.Flush();
