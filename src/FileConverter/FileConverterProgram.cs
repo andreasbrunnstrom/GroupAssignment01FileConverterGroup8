@@ -34,25 +34,26 @@ namespace FileConverter
 
                 List<string> supportedExtensions = new List<string>();
 
-                List<IFileHandler> handlers = new List<IFileHandler>();
+                List<IFileHandler> handlers = new List<IFileHandler>()
                 {
-                    new HandleCSV();
-                    new HandleBIN();
-                    new HandleJSON();
-                    new HandleXML();
-                }
+                    new HandleCSV(),
+                    new HandleBIN(),
+                    new HandleJSON(),
+                    new HandleXML()
+                };
                 foreach (var handler in handlers)
                 {
                     if (inputExtension == handler.Extension)
                     {
                         inputHandler = handler;
                     }
-                    if(outputExtension == handler.Extension)
+                    if (outputExtension == handler.Extension)
                     {
                         outputHandler = handler;
                     }
                     supportedExtensions.Add(handler.Extension);
                 }
+
                 if (!supportedExtensions.Contains(inputExtension) || !supportedExtensions.Contains(outputExtension))
                     throw new ArgumentException("Extension not supported.");
 

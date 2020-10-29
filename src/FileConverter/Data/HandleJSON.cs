@@ -17,7 +17,7 @@ namespace FileConverter.Data
                 using (JsonTextReader jsonReader = new JsonTextReader(reader))
                 {
                     JsonSerializer ser = new JsonSerializer();
-                    return ser.Deserialize<List<ProductData>>(jsonReader);
+                    return ser.Deserialize<List<ProductData>>(jsonReader); // Need to add Indented somehow
                 }
             }
             catch
