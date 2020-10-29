@@ -33,7 +33,7 @@ namespace FileConverter.Data
                         productData.AvailableUntil = Convert.ToDateTime(columns[4]);
                     }
 
-                    productData.UnitPrice.Amount = Convert.ToDecimal(columns[5]);
+                    productData.UnitPrice.Amount = Convert.ToDecimal(columns[5]);                    
 
                     List<string> markets = columns[6].Split(',').ToList();
                     productData.AvailableInMarkets.AddRange(markets);

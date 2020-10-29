@@ -11,9 +11,9 @@ namespace FileConverter.Models
         public string DisplayName { get; set; }
         public DateTime AvailableFrom { get; set; }
         public DateTime? AvailableUntil { get; set; }
-        public UnitPrice UnitPrice { get; set; }
-        public List<string> AvailableInMarkets { get; set; }
-        public List<PropertyData> Properties { get; set; }
-        public List<string> Sizes { get; set; }
+        public UnitPrice UnitPrice { get; set; } = new UnitPrice();
+        public List<string> AvailableInMarkets { get; set; } = new List<string>();
+        public List<PropertyData> Properties { get; set; } = new List<PropertyData>();
+        public List<string> Sizes { get; set; } = new List<string>();
     }
 }
