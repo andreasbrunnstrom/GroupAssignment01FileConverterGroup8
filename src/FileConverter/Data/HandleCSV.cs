@@ -58,7 +58,7 @@ namespace FileConverter.Data
             using (StreamWriter steamWriter = new StreamWriter(stream))
             {
                 StringBuilder csv = new StringBuilder();
-                ProductData[] products = (ProductData[])data; // Need resolving. Unable to Cast.
+                var products = (dynamic)data;
 
                 foreach (var product in products)
                 {

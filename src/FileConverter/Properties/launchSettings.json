@@ -1,7 +1,8 @@
 {
   "profiles": {
     "FileConverter": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--i Template.xml --o test.csv"
     }
   }
 }
