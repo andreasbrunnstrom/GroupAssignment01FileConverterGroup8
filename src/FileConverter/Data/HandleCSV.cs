@@ -69,11 +69,10 @@ namespace FileConverter.Data
                 productData.AvailableUntil = DateTime.Parse(columns[4], CultureInfo.InvariantCulture);
             }
 
-            PropertyData property;
-            UnitPrice unitPrice = new UnitPrice();           
+            PropertyData property;           
             if (!string.IsNullOrEmpty(columns[5]))
             {
-                unitPrice.Amount = decimal.Parse(columns[5]);                
+                productData.UnitPrice.Amount = decimal.Parse(columns[5]);                
             }
             //if (!string.IsNullOrEmpty(columns[6]))
             //{
@@ -113,8 +112,9 @@ namespace FileConverter.Data
             {
                 property = CreateBoolProperty("ProductSoldOut", columns[12]);
             }
+            else if (string.IsNullOrEmpty(columns[12])) { property = null; }
 
-
+            
             return productData;
         }
 
@@ -242,10 +242,15 @@ namespace FileConverter.Data
             if (!string.IsNullOrEmpty(product.DisplayName)) { result[2] = product.DisplayName; }
             result[3] = product.AvailableFrom.ToString();
             if (product.AvailableUntil.HasValue) { result[4] = product.AvailableUntil.ToString(); }
-            result[5] = product.UnitPrice.Amount.ToString();
+            result[5] = product.UnitPrice.Amount.ToString(); // läses inte
             //result[6] = product.UnitPrice.Currency.ToString();
-            result[7] = product.AvailableInMarkets.ToString();
-            result[8] = product.Sizes.ToString();
+
+            string markets = "";
+            foreach (var market in product.AvailableInMarkets) {markets = market;}
+            result[7] = markets;
+            string sizes = "";
+            foreach (var size in product.Sizes) { sizes = size; }
+            result[8] = sizes;
 
             Dictionary<string, object> properties = product.Properties.ToDictionary(x => x.Name, x => x.Value);
 
