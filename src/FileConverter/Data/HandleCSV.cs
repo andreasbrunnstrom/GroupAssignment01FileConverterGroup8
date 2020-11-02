@@ -76,42 +76,45 @@ namespace FileConverter.Data
             {
                 unitPrice.Amount = int.Parse(columns[5]);                
             }
+            //if (!string.IsNullOrEmpty(columns[6]))
+            //{
+            //    unitPrice.Currency = columns[6];
+            //}
             if (!string.IsNullOrEmpty(columns[6]))
             {
-                unitPrice.Currency = columns[6];
+                productData.AvailableInMarkets.Add(columns[6].ToString()); // if NO SE DNK
             }
             if (!string.IsNullOrEmpty(columns[7]))
             {
-                productData.AvailableInMarkets.Add(columns[7]); // if NO SE DNK
+                productData.Sizes.Add(columns[7].ToString());  // Several options                          
             }
+            
+            
             if (!string.IsNullOrEmpty(columns[8]))
             {
-                productData.Sizes.Add(columns[8]);  // Several options                          
+                property = CreateStringProperty("Description", columns[8]);
+                productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[9]))
             {
-                property = CreateStringProperty("Description", columns[9]);
+                property = CreateStringProperty("DelieveryNote", columns[9]);
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[10]))
             {
-                property = CreateStringProperty("DelieveryNote", columns[10]);
+                property = CreateIntProperty("DeliveryFromDays", columns[10]);
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[11]))
             {
-                property = CreateIntProperty("DeliveryFromDays", columns[11]);
+                property = CreateIntProperty("DeliveryToDays", columns[11]);
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[12]))
             {
-                property = CreateIntProperty("DeliveryToDays", columns[12]);
-                productData.Properties.Add(property);
+                property = CreateBoolProperty("ProductSoldOut", columns[13]);
             }
-            if (!string.IsNullOrEmpty(columns[13]))
-            {
-                property = CreateBoolProperty("ProductSoldOut", columns[13].ToString());
-            }
+
 
             return productData;
         }
