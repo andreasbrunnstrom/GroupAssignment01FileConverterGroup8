@@ -4,6 +4,7 @@ using FileConverter.Services;
 using FileConverter.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DeepEqual.Syntax;
+using DeepEqual;
 
 namespace FileConverter.Tests
 {
@@ -13,7 +14,7 @@ namespace FileConverter.Tests
         [TestMethod]
         public void HasXmlReader()
         {
-            HasReader(".xml");   
+            HasReader(".xml");
         }
 
         [TestMethod]
@@ -26,6 +27,18 @@ namespace FileConverter.Tests
         public void CanConvertXml()
         {
             CanConvert(".xml");
+        }
+
+        [TestMethod]
+        public void CanConvertCsvToXml()
+        {
+            CanConvert(".xml", ".csv");
+        }
+
+        [TestMethod]
+        public void CanConvertJsonToXml()
+        {
+            CanConvert(".xml", ".json");
         }
 
         [TestMethod]
@@ -47,6 +60,18 @@ namespace FileConverter.Tests
         }
 
         [TestMethod]
+        public void CanConvertXmlToJson()
+        {
+            CanConvert(".json", ".xml");
+        }
+
+        [TestMethod]
+        public void CanConvertCsvToJson()
+        {
+            CanConvert(".json", ".csv");
+        }
+
+        [TestMethod]
         public void HasBinaryReader()
         {
             HasReader(".bin");
@@ -59,7 +84,7 @@ namespace FileConverter.Tests
         }
 
         [TestMethod]
-        public void CanConvertBinary()
+        public void CanConvertXmlToBinary()
         {
             CanConvert(".bin", ".xml");
         }
@@ -80,6 +105,18 @@ namespace FileConverter.Tests
         public void CanConvertCsv()
         {
             CanConvert(".csv");
+        }
+
+        [TestMethod]
+        public void CanConvertJsonToCsv()
+        {
+            CanConvert(".csv", ".json");
+        }
+
+        [TestMethod]
+        public void CanConvertXmlToCsv()
+        {
+            CanConvert(".csv", ".xml");
         }
 
         private void CanConvert(string extension, string sourceExtension = null)
@@ -107,7 +144,7 @@ namespace FileConverter.Tests
                 using (var outputBuffer = new MemoryStream())
                 {
                     writer.Write(outputBuffer, firstRead);
-                    
+
                     var bytes = outputBuffer.ToArray();
                     var bytesLargerThanZero = bytes.Length > 0;
 
@@ -119,7 +156,7 @@ namespace FileConverter.Tests
                 }
             }
 
-            firstRead.ShouldDeepEqual(secondRead);
+            firstRead.ShouldDeepEqual(secondRead, GetComparisonRules());
         }
 
         private void HasWriter(string extension)
@@ -150,6 +187,80 @@ namespace FileConverter.Tests
         {
             var extension = Path.GetExtension(path);
             return ConverterRegistrationScanner.SupportedReaders[extension];
+        }
+
+        private IComparison GetComparisonRules()
+        {
+            ComparisonBuilder comparisonBuilder = new ComparisonBuilder();
+
+            comparisonBuilder.CustomComparisons.Add(new LenientStringComparison());
+            comparisonBuilder.CustomComparisons.Add(new LenientDateTimeComparison());
+
+            return comparisonBuilder.Create();
+        }
+
+        class LenientStringComparison : IComparison
+        {
+            public bool CanCompare(Type type1, Type type2)
+            {
+                if (type1 != typeof(string)) return false;
+                if (type2 != typeof(string)) return false;
+
+                return true;
+            }
+
+            public (ComparisonResult result, IComparisonContext context) Compare(IComparisonContext context, object value1, object value2)
+            {
+                var string1 = (string)value1 ?? string.Empty;
+                var string2 = (string)value2 ?? string.Empty;
+
+                var equals = StripCarriageReturn(string1) == StripCarriageReturn(string2);
+                var result = equals ? ComparisonResult.Pass : ComparisonResult.Fail;
+
+                if (!equals)
+                {
+                    context.AddDifference(string1, string2);
+                }
+
+                return (result, context);
+            }
+
+            private string StripCarriageReturn(string input)
+            {
+                return input.Replace("\r", string.Empty);
+            }
+        }
+
+        class LenientDateTimeComparison : IComparison
+        {
+            public bool CanCompare(Type type1, Type type2)
+            {
+                if (type1 != typeof(DateTime)) return false;
+                if (type2 != typeof(DateTime)) return false;
+
+                return true;
+            }
+
+            public (ComparisonResult result, IComparisonContext context) Compare(IComparisonContext context, object value1, object value2)
+            {
+                var date1 = (DateTime)value1;
+                var date2 = (DateTime)value2;
+
+                var equals = GetCoarseDate(date1) == GetCoarseDate(date2);
+                var result = equals ? ComparisonResult.Pass : ComparisonResult.Fail;
+
+                if (!equals)
+                {
+                    context.AddDifference(date1, date2);
+                }
+
+                return (result, context);
+            }
+
+            private DateTime GetCoarseDate(DateTime date)
+            {
+                return new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second, date.Kind);
+            }
         }
     }
 }

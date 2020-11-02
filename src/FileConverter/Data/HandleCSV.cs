@@ -23,8 +23,8 @@ namespace FileConverter.Data
 
                     ProductData productData = new ProductData();
 
-                    productData.Id = columns[0];
-                    productData.Name = columns[1];
+                    productData.Id = columns[0]; 
+                    productData.Name = columns[1];                    
                     productData.DisplayName = columns[2];
                     productData.AvailableFrom = Convert.ToDateTime(columns[3]);
 
@@ -42,10 +42,12 @@ namespace FileConverter.Data
                     productData.Sizes.AddRange(sizes);
 
                     productData.Properties.Add(new PropertyData { Name = "Description", Value = columns[8] });
-                    productData.Properties.Add(new PropertyData { Name = "DelieveryNote", Value = columns[9] });
-                    productData.Properties.Add(new PropertyData { Name = "DelieveryFromDays", Value = columns[10] });
-                    productData.Properties.Add(new PropertyData { Name = "DelieveryToDays", Value = columns[11] });
-                    productData.Properties.Add(new PropertyData { Name = "ProductSoldOut", Value = columns[12] });
+                    if (columns.Length == 10) { productData.Properties.Add(new PropertyData { Name = "DelieveryNote", Value = columns[9] }); }              
+                    if(columns.Length == 11) { productData.Properties.Add(new PropertyData { Name = "DelieveryFromDays", Value = columns[10] }); }
+                    if(columns.Length == 12) { productData.Properties.Add(new PropertyData { Name = "DelieveryToDays", Value = columns[11] }); }                 
+                    if(columns.Length == 13) { productData.Properties.Add(new PropertyData { Name = "ProductSoldOut", Value = columns[12] }); }
+                    
+                    
 
                     products.Add(productData);
                 }
