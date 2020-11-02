@@ -23,8 +23,9 @@ namespace FileConverter.Data
 
                     ProductData productData = new ProductData();
 
-                    productData.Id = columns[0]; 
-                    productData.Name = columns[1];                    
+                    productData.Id = columns[0];
+                    productData.Name = columns[1];
+                                                                             
                     productData.DisplayName = columns[2];
                     productData.AvailableFrom = Convert.ToDateTime(columns[3]);
 
@@ -42,7 +43,7 @@ namespace FileConverter.Data
                     productData.Sizes.AddRange(sizes);
 
                     productData.Properties.Add(new PropertyData { Name = "Description", Value = columns[8] });
-                    if (columns.Length == 10) { productData.Properties.Add(new PropertyData { Name = "DelieveryNote", Value = columns[9] }); }              
+                    if(columns.Length == 10) { productData.Properties.Add(new PropertyData { Name = "DelieveryNote", Value = columns[9] }); }              
                     if(columns.Length == 11) { productData.Properties.Add(new PropertyData { Name = "DelieveryFromDays", Value = columns[10] }); }
                     if(columns.Length == 12) { productData.Properties.Add(new PropertyData { Name = "DelieveryToDays", Value = columns[11] }); }                 
                     if(columns.Length == 13) { productData.Properties.Add(new PropertyData { Name = "ProductSoldOut", Value = columns[12] }); }
@@ -52,15 +53,15 @@ namespace FileConverter.Data
                     products.Add(productData);
                 }
             }
-            return products.ToArray();
+            return products;
         }
 
         public void Write(Stream stream, object data)
         {
-            using (StreamWriter steamWriter = new StreamWriter(stream))
+            using (StreamWriter streamWriter = new StreamWriter(stream))
             {
                 StringBuilder csv = new StringBuilder();
-                var products = (dynamic)data;
+                List<ProductData> products = (List<ProductData>)data;
 
                 foreach (var product in products)
                 {
@@ -79,7 +80,7 @@ namespace FileConverter.Data
 
                     csv.AppendLine(line);
                 }
-                steamWriter.Write(csv.ToString());
+                streamWriter.Write(csv.ToString().ToArray());
             }
         }
     }
