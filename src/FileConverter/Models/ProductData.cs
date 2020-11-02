@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace FileConverter.Models
 {
@@ -13,6 +14,7 @@ namespace FileConverter.Models
         public DateTime? AvailableUntil { get; set; }
         public UnitPrice UnitPrice { get; set; } = new UnitPrice();
         public List<string> AvailableInMarkets { get; set; } = new List<string>();
+        [XmlArrayItem("PropertyData")]
         public List<PropertyData> Properties { get; set; } = new List<PropertyData>();
         public List<string> Sizes { get; set; } = new List<string>();
     }

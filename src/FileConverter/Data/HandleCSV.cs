@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -48,40 +49,109 @@ namespace FileConverter.Data
                     if(columns.Length == 12) { productData.Properties.Add(new PropertyData { Name = "DelieveryToDays", Value = columns[11] }); }                 
                     if(columns.Length == 13) { productData.Properties.Add(new PropertyData { Name = "ProductSoldOut", Value = columns[12] }); }
                     
-                    
-
                     products.Add(productData);
                 }
             }
-            return products;
+            return products.ToArray();
         }
 
         public void Write(Stream stream, object data)
         {
             using (StreamWriter streamWriter = new StreamWriter(stream))
             {
-                StringBuilder csv = new StringBuilder();
-                List<ProductData> products = (List<ProductData>)data;
+                StringBuilder stringBuilder = new StringBuilder();
+                List<ProductData> products = new List<ProductData>();
 
-                foreach (var product in products)
+                foreach (var productData in products)
                 {
-                    string markets = string.Join(',', product.AvailableInMarkets);
-                    string sizes = string.Join(',', product.Sizes);
+                    string markets = string.Join(',', productData.AvailableInMarkets);
+                    string sizes = string.Join(',', productData.Sizes);
                     List<string> props = new List<string>();
-                    foreach (PropertyData prop in product.Properties)
+                    foreach (PropertyData prop in productData.Properties)
                     {
                         props.Add(prop.Value.ToString());
                     }
                     string properties = string.Join(';', props);
-                    var line = $"{product.Id};{product.Name};{product.DisplayName};" +
-                        $"{product.AvailableFrom};{product.AvailableUntil};" +
-                        $"{product.UnitPrice.Amount};{markets};" +
+                    var line = $"{productData.Id};{productData.Name};{productData.DisplayName};" +
+                        $"{productData.AvailableFrom};{productData.AvailableUntil};" +
+                        $"{productData.UnitPrice.Amount};{markets};" +
                         $"{sizes};{properties}";
 
-                    csv.AppendLine(line);
+                    stringBuilder.AppendLine(line);
                 }
-                streamWriter.Write(csv.ToString().ToArray());
+                streamWriter.Write(stringBuilder.ToString());
             }
         }
+        //public string WriteCsv(List<ProductData> products)
+        //{
+        //    var stringBuilder = new StringBuilder();
+
+        //    foreach (var productData in products)
+        //    {
+        //        string[] columns = GetColumns(productData);
+        //        string line = string.Join(";", columns);
+
+        //        stringBuilder.AppendLine(line);
+        //    }
+        //    return stringBuilder.ToString();
+        //}
+        //private string[] GetColumns(ProductData productData)
+        //{
+        //    string[] column = new string[13];
+
+        //    column[0] = productData.Id;
+        //    column[1] = productData.Name;
+        //    column[2] = productData.DisplayName;
+        //    column[3] = productData.AvailableFrom.ToString("yyyy-MM-dd HH:mm:ss");
+
+        //    Dictionary<string, object> properties = productData.Properties.ToDictionary(x => x.Name, x => x.Value);
+            
+        //    if (properties.ContainsKey("AvailableUntil"))
+        //    {
+        //        column[4] = properties["AvailableUntil"].ToString();
+        //    }
+
+        //    if (properties.ContainsKey("UnitPrice"))
+        //    {
+        //        column[5] = properties["UnitPrice"].ToString();
+        //    }
+
+        //    if (properties.ContainsKey("AvailableInMarkets"))
+        //    {
+        //        column[6] = properties["AvailableInMarkets"].ToString();
+        //    }
+
+        //    if (properties.ContainsKey("Sizes"))
+        //    {
+        //        column[7] = properties["Sizes"].ToString();
+        //    }
+
+        //    if (properties.ContainsKey("Description"))
+        //    {
+        //        column[8] = properties["Description"] as string;
+        //    }
+
+        //    if (properties.ContainsKey("DelieveryNote"))
+        //    {
+        //        column[9] = properties["DelieveryNote"].ToString();
+        //    }
+
+        //    if (properties.ContainsKey("DelieveryFromDays"))
+        //    {
+        //        column[10] = properties["DelieveryFromDays"].ToString();
+        //    }
+
+        //    if (properties.ContainsKey("DelieveryToDays"))
+        //    {
+        //        column[11] = properties["DelieveryToDays"].ToString();
+        //    }
+
+        //    if (properties.ContainsKey("ProductSoldOut"))
+        //    {
+        //        column[12] = properties["ProductSoldOut"].ToString();
+        //    }
+
+        //    return column;
+        //}
     }
 }
