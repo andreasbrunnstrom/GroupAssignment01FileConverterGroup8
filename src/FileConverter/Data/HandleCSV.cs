@@ -112,7 +112,7 @@ namespace FileConverter.Data
             }
             if (!string.IsNullOrEmpty(columns[12]))
             {
-                property = CreateBoolProperty("ProductSoldOut", columns[13]);
+                property = CreateBoolProperty("ProductSoldOut", columns[12]);
             }
 
 
@@ -245,7 +245,7 @@ namespace FileConverter.Data
             result[3] = product.AvailableFrom.ToString();
             if(product.AvailableUntil.HasValue) { result[4] = product.AvailableUntil.ToString(); }
             result[5] = product.UnitPrice.Amount.ToString();
-            result[6] = product.UnitPrice.Currency;
+            //result[6] = product.UnitPrice.Currency.ToString();
             result[7] = product.AvailableInMarkets.ToString();
             result[8] = product.Sizes.ToString();
 
