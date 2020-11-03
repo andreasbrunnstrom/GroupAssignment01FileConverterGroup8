@@ -249,7 +249,7 @@ namespace FileConverter.Data
 
         private string[] GetColumns(ProductData product)
         {
-            string[] result = new string[14];
+            string[] result = new string[13];
             result[0] = product.Id.ToString();
             result[1] = product.Name.ToString();
             if (!string.IsNullOrEmpty(product.DisplayName)) { result[2] = product.DisplayName; }
@@ -259,19 +259,32 @@ namespace FileConverter.Data
             //result[6] = product.UnitPrice.Currency.ToString();
 
             string markets = "";
-            foreach (var market in product.AvailableInMarkets) {markets = market;}
-            result[7] = markets;
+            foreach (var market in product.AvailableInMarkets) 
+            { 
+                if (market != null && markets.Length < 1)
+                { markets = market; }
+                else if (market != null && markets.Length > 1)
+                { markets += "," + market; } 
+            }
+            result[6] = markets;
+
             string sizes = "";
-            foreach (var size in product.Sizes) { sizes = size; }
-            result[8] = sizes;
+            foreach (var size in product.Sizes)
+            {
+                if (size != null && sizes.Length < 1)
+                { sizes = size; }
+                else if (size != null && sizes.Length > 1)
+                { sizes += "," + size; }
+            }
+            result[7] = sizes;
 
             Dictionary<string, object> properties = product.Properties.ToDictionary(x => x.Name, x => x.Value);
 
-            if (properties.ContainsKey("Description"))      { result[9]  = properties["Description"].ToString(); }
-            if (properties.ContainsKey("DelieveryNote"))    { result[10] = properties["DelieveryNote"].ToString(); }
-            if (properties.ContainsKey("DeliveryFromDays")) { result[11] = properties["DeliveryFromDays"].ToString(); }
-            if (properties.ContainsKey("DeliveryToDays"))   { result[12] = properties["DeliveryToDays"].ToString(); }
-            if (properties.ContainsKey("ProductSoldOut"))   { result[13] = properties["ProductSoldOut"].ToString(); }
+            if (properties.ContainsKey("Description"))      { result[8]  = properties["Description"].ToString(); }
+            if (properties.ContainsKey("DelieveryNote"))    { result[9] = properties["DelieveryNote"].ToString(); }
+            if (properties.ContainsKey("DeliveryFromDays")) { result[10] = properties["DeliveryFromDays"].ToString(); }
+            if (properties.ContainsKey("DeliveryToDays"))   { result[11] = properties["DeliveryToDays"].ToString(); }
+            if (properties.ContainsKey("ProductSoldOut"))   { result[12] = properties["ProductSoldOut"].ToString(); }
 
             return result;
         }
