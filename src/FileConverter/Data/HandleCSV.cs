@@ -74,20 +74,14 @@ namespace FileConverter.Data
             {
                 productData.UnitPrice.Amount = decimal.Parse(columns[5]);                
             }
-            //if (!string.IsNullOrEmpty(columns[6]))
-            //{
-            //    unitPrice.Currency = columns[6];
-            //}
             if (!string.IsNullOrEmpty(columns[6]))
             {
-                productData.AvailableInMarkets.Add(columns[6].ToString()); // if NO SE DNK
+                productData.AvailableInMarkets.Add(columns[6].ToString());
             }
             if (!string.IsNullOrEmpty(columns[7]))
             {
-                productData.Sizes.Add(columns[7].ToString());  // Several options                          
-            }
-            
-            
+                productData.Sizes.Add(columns[7].ToString());                      
+            }                        
             if (!string.IsNullOrEmpty(columns[8]))
             {
                 property = CreateStringProperty("Description", columns[8]);
@@ -98,19 +92,22 @@ namespace FileConverter.Data
                 property = CreateStringProperty("DelieveryNote", columns[9]);
                 productData.Properties.Add(property);
             }
-            if (!string.IsNullOrEmpty(columns[10])) // Om den är tom så blir det ThrowOverflowException
+            if (!string.IsNullOrEmpty(columns[10]))
             {
-                property = CreateIntProperty("DeliveryFromDays", columns[10]); // något mer blir fel här
+                property = new PropertyData() { Name = "DeliveryFromDays", Value = columns[10] };
+                //property = CreateIntProperty("DeliveryFromDays", columns[10]); Provar att kringgå metoderna och bara lägga in direct i Value. Mer utförlig info från ett test nu.
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[11]))
             {
-                property = CreateIntProperty("DeliveryToDays", columns[11]);
+                property = new PropertyData() { Name = "DeliveryToDays", Value = columns[11] };
+                //property = CreateIntProperty("DeliveryToDays", columns[11]);
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[12]))
             {
-                property = CreateBoolProperty("ProductSoldOut", columns[12]);
+                property = new PropertyData() { Name = "ProductSoldOut", Value = columns[12] };
+                //property = CreateBoolProperty("ProductSoldOut", columns[12]);
                 productData.Properties.Add(property);
             }
             
