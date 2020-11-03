@@ -280,13 +280,28 @@ namespace FileConverter.Data
 
             Dictionary<string, object> properties = product.Properties.ToDictionary(x => x.Name, x => x.Value);
 
-            if (properties.ContainsKey("Description"))      { result[8]  = properties["Description"].ToString(); }
-            if (properties.ContainsKey("DelieveryNote"))    { result[9] = properties["DelieveryNote"].ToString(); }
+            if (properties.ContainsKey("Description"))
+            {
+                string cleaned = RemoveNewLine(properties["Description"].ToString());
+                result[8] = cleaned;/*properties["Description"].ToString(); */
+
+            }
+            if (properties.ContainsKey("DelieveryNote"))    
+            {
+                string cleaned = RemoveNewLine(properties["DelieveryNote"].ToString());
+                result[9] = cleaned;/*properties["DelieveryNote"].ToString();*/ 
+            }
             if (properties.ContainsKey("DeliveryFromDays")) { result[10] = properties["DeliveryFromDays"].ToString(); }
             if (properties.ContainsKey("DeliveryToDays"))   { result[11] = properties["DeliveryToDays"].ToString(); }
             if (properties.ContainsKey("ProductSoldOut"))   { result[12] = properties["ProductSoldOut"].ToString(); }
 
             return result;
+        }
+
+        private string RemoveNewLine(string input)
+        {
+            string cleaned = input.Replace("\n", "|").Replace("\r", "");
+            return cleaned;
         }
         //private string[] GetColumns(ProductData productData)
         //{
