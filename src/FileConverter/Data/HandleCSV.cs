@@ -58,7 +58,7 @@ namespace FileConverter.Data
 
             if (!string.IsNullOrEmpty(columns[2]))
             {
-                productData.DisplayName = columns[2].ToString();
+                productData.DisplayName = columns[2];
             }
             if (!string.IsNullOrEmpty(columns[3]))
             {
@@ -76,11 +76,11 @@ namespace FileConverter.Data
             }
             if (!string.IsNullOrEmpty(columns[6]))
             {
-                productData.AvailableInMarkets.Add(columns[6].ToString());
+                productData.AvailableInMarkets.Add(columns[6]);
             }
             if (!string.IsNullOrEmpty(columns[7]))
             {
-                productData.Sizes.Add(columns[7].ToString());                      
+                productData.Sizes.Add(columns[7]);
             }                        
             if (!string.IsNullOrEmpty(columns[8]))
             {
@@ -249,33 +249,42 @@ namespace FileConverter.Data
 
         private string[] GetColumns(ProductData product)
         {
+            product.UnitPrice.Currency = null; // Avhjälpte felet med Currency helt av någon anledning.
             string[] result = new string[13];
             result[0] = product.Id.ToString();
             result[1] = product.Name.ToString();
             if (!string.IsNullOrEmpty(product.DisplayName)) { result[2] = product.DisplayName; }
             result[3] = product.AvailableFrom.ToString();
             if (product.AvailableUntil.HasValue) { result[4] = product.AvailableUntil.ToString(); }
-            result[5] = product.UnitPrice.Amount.ToString();
+            result[5] = Math.Round(product.UnitPrice.Amount,0).ToString();
             //result[6] = product.UnitPrice.Currency.ToString();
 
             string markets = "";
+            int count = 0;
             foreach (var market in product.AvailableInMarkets) 
             { 
-                if (market != null && markets.Length < 1)
+                if (count < 1)
                 { markets = market; }
-                else if (market != null && markets.Length > 1)
-                { markets += "," + market; } 
+                else
+                { markets += "," + market; }
+                count++;
             }
+            //product.AvailableInMarkets.Clear();
+            //product.AvailableInMarkets.Add(markets);
             result[6] = markets;
 
             string sizes = "";
+            count = 0;
             foreach (var size in product.Sizes)
             {
-                if (size != null && sizes.Length < 1)
+                if (count < 1)
                 { sizes = size; }
-                else if (size != null && sizes.Length > 1)
+                else
                 { sizes += "," + size; }
+                count++;
             }
+            //product.Sizes.Clear();
+            //product.AvailableInMarkets.Add(sizes);
             result[7] = sizes;
 
             Dictionary<string, object> properties = product.Properties.ToDictionary(x => x.Name, x => x.Value);
