@@ -94,11 +94,15 @@ namespace FileConverter.Data
             if (!string.IsNullOrEmpty(columns[8]))
             {
                 property = CreateStringProperty("Description", columns[8]);
+                string newLine = AddNewLine(property.Value.ToString());
+                property.Value = newLine;
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[9]))
             {
                 property = CreateStringProperty("DelieveryNote", columns[9]);
+                string newLine = AddNewLine(property.Value.ToString());
+                property.Value = newLine;
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[10]))
@@ -198,6 +202,12 @@ namespace FileConverter.Data
         {
             string cleaned = input.Replace("\r\n", "|").Replace("\n", "|"); // Fixat
             return cleaned;
+        }
+
+        private string AddNewLine(string input)
+        {
+            string addedNewLine = input.Replace("|", "\r\n").Replace("|", "\n");
+            return addedNewLine;
         }
 
         private PropertyData CreateIntProperty(string name, string data)
