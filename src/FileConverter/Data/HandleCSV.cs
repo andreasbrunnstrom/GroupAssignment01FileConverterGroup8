@@ -94,19 +94,19 @@ namespace FileConverter.Data
             }
             if (!string.IsNullOrEmpty(columns[10]))
             {
-                property = new PropertyData() { Name = "DeliveryFromDays", Value = columns[10] };
+                property = new PropertyData() { Name = "DeliveryFromDays", Value = int.Parse(columns[10]) };
                 //property = CreateIntProperty("DeliveryFromDays", columns[10]); Provar att kringgå metoderna och bara lägga in direct i Value. Mer utförlig info från ett test nu.
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[11]))
             {
-                property = new PropertyData() { Name = "DeliveryToDays", Value = columns[11] };
+                property = new PropertyData() { Name = "DeliveryToDays", Value = int.Parse(columns[11]) };
                 //property = CreateIntProperty("DeliveryToDays", columns[11]);
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[12]))
             {
-                property = new PropertyData() { Name = "ProductSoldOut", Value = columns[12] };
+                property = new PropertyData() { Name = "ProductSoldOut", Value = bool.Parse(columns[12]) };
                 //property = CreateBoolProperty("ProductSoldOut", columns[12]);
                 productData.Properties.Add(property);
             }
