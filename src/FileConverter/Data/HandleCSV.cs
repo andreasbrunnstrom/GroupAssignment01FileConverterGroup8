@@ -73,51 +73,54 @@ namespace FileConverter.Data
             if (!string.IsNullOrEmpty(columns[5]))
             {
                 productData.UnitPrice.Amount = decimal.Parse(columns[5]);
-                productData.UnitPrice.Currency = "";
             }
             if (!string.IsNullOrEmpty(columns[6]))
             {
-                var hold = columns[6].Split(",");
-                foreach (var el in hold)
-                {
-                    productData.AvailableInMarkets.Add(el);
-                }
+                productData.UnitPrice.Currency = columns[6];
             }
             if (!string.IsNullOrEmpty(columns[7]))
             {
                 var hold = columns[7].Split(",");
                 foreach (var el in hold)
                 {
+                    productData.AvailableInMarkets.Add(el);
+                }
+            }
+            if (!string.IsNullOrEmpty(columns[8]))
+            {
+                var hold = columns[8].Split(",");
+                foreach (var el in hold)
+                {
                     productData.Sizes.Add(el);
                 }             
             }                        
-            if (!string.IsNullOrEmpty(columns[8]))
-            {
-                property = CreateStringProperty("Description", columns[8]);
-                string newLine = AddNewLine(property.Value.ToString());
-                property.Value = newLine;
-                productData.Properties.Add(property);
-            }
             if (!string.IsNullOrEmpty(columns[9]))
             {
-                property = CreateStringProperty("DelieveryNote", columns[9]);
+                property = CreateStringProperty("Description", columns[9]);
                 string newLine = AddNewLine(property.Value.ToString());
                 property.Value = newLine;
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[10]))
             {
-                property = CreateIntProperty("DeliveryFromDays", columns[10]);
+                property = CreateStringProperty("DelieveryNote", columns[10]);
+                string newLine = AddNewLine(property.Value.ToString());
+                property.Value = newLine;
+                productData.Properties.Add(property);
+            }
+            if (!string.IsNullOrEmpty(columns[11]))
+            {
+                property = CreateIntProperty("DeliveryFromDays", columns[11]);
                productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[11]))
             {
-                property = CreateIntProperty("DeliveryToDays", columns[11]);
+                property = CreateIntProperty("DeliveryToDays", columns[12]);
                 productData.Properties.Add(property);
             }
-            if (!string.IsNullOrEmpty(columns[12]))
+            if (!string.IsNullOrEmpty(columns[13]))
             {
-                property = CreateBoolProperty("ProductSoldOut", columns[12]);
+                property = CreateBoolProperty("ProductSoldOut", columns[13]);
                 productData.Properties.Add(property);
             }
             
@@ -143,14 +146,14 @@ namespace FileConverter.Data
 
         private string[] GetColumns(ProductData product)
         {
-            string[] result = new string[13];
+            string[] result = new string[14];
             result[0] = product.Id.ToString();
             result[1] = product.Name.ToString();
             if (!string.IsNullOrEmpty(product.DisplayName)) { result[2] = product.DisplayName; }
             result[3] = product.AvailableFrom.ToString();
             if (product.AvailableUntil.HasValue) { result[4] = product.AvailableUntil.ToString(); }
             result[5] = Math.Round(product.UnitPrice.Amount,0).ToString();
-            //result[6] = product.UnitPrice.Currency.ToString();
+            result[6] = product.UnitPrice.Currency.ToString();
 
             string markets = "";
             int count = 0;
@@ -163,7 +166,7 @@ namespace FileConverter.Data
                 count++;
             }
 
-            result[6] = markets;
+            result[7] = markets;
 
             string sizes = "";
             count = 0;
@@ -176,31 +179,31 @@ namespace FileConverter.Data
                 count++;
             }
 
-            result[7] = sizes;
+            result[8] = sizes;
 
             Dictionary<string, object> properties = product.Properties.ToDictionary(x => x.Name, x => x.Value);
 
             if (properties.ContainsKey("Description"))
             {
                 string cleaned = RemoveNewLine(properties["Description"].ToString());
-                result[8] = cleaned;
+                result[9] = cleaned;
 
             }
             if (properties.ContainsKey("DelieveryNote"))    
             {
                 string cleaned = RemoveNewLine(properties["DelieveryNote"].ToString());
-                result[9] = cleaned;
+                result[10] = cleaned;
             }
-            if (properties.ContainsKey("DeliveryFromDays")) { result[10] = properties["DeliveryFromDays"].ToString(); }
-            if (properties.ContainsKey("DeliveryToDays"))   { result[11] = properties["DeliveryToDays"].ToString(); }
-            if (properties.ContainsKey("ProductSoldOut"))   { result[12] = properties["ProductSoldOut"].ToString(); }
+            if (properties.ContainsKey("DeliveryFromDays")) { result[11] = properties["DeliveryFromDays"].ToString(); }
+            if (properties.ContainsKey("DeliveryToDays"))   { result[12] = properties["DeliveryToDays"].ToString(); }
+            if (properties.ContainsKey("ProductSoldOut"))   { result[13] = properties["ProductSoldOut"].ToString(); }
 
             return result;
         }
 
         private string RemoveNewLine(string input)
         {
-            string cleaned = input.Replace("\r\n", "|").Replace("\n", "|"); // Fixat
+            string cleaned = input.Replace("\r\n", "|").Replace("\n", "|");
             return cleaned;
         }
 
