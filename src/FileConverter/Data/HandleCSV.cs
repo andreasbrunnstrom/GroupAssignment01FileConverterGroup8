@@ -72,7 +72,8 @@ namespace FileConverter.Data
             PropertyData property;           
             if (!string.IsNullOrEmpty(columns[5]))
             {
-                productData.UnitPrice.Amount = decimal.Parse(columns[5]);                
+                productData.UnitPrice.Amount = decimal.Parse(columns[5]);
+                productData.UnitPrice.Currency = "";
             }
             if (!string.IsNullOrEmpty(columns[6]))
             {
@@ -138,7 +139,6 @@ namespace FileConverter.Data
 
         private string[] GetColumns(ProductData product)
         {
-            product.UnitPrice.Currency = null; // Avhjälpte felet med Currency helt av någon anledning.
             string[] result = new string[13];
             result[0] = product.Id.ToString();
             result[1] = product.Name.ToString();
@@ -196,7 +196,7 @@ namespace FileConverter.Data
 
         private string RemoveNewLine(string input)
         {
-            string cleaned = input.Replace("\n", "|").Replace("\r", "");
+            string cleaned = input.Replace("\r\n", "|").Replace("\n", "|"); // Fixat
             return cleaned;
         }
 
