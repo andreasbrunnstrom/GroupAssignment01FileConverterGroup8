@@ -72,6 +72,7 @@ namespace FileConverter
             }
             
         }
+
         static void Abort(IEnumerable<Error> errors)
         {
             foreach (var error in errors)

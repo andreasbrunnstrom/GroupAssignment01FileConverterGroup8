@@ -102,141 +102,22 @@ namespace FileConverter.Data
             }
             if (!string.IsNullOrEmpty(columns[10]))
             {
-                //property = new PropertyData() { Name = "DeliveryFromDays", Value = int.Parse(columns[10]) };
                 property = CreateIntProperty("DeliveryFromDays", columns[10]);
                productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[11]))
             {
-                //property = new PropertyData() { Name = "DeliveryToDays", Value = int.Parse(columns[11]) };
                 property = CreateIntProperty("DeliveryToDays", columns[11]);
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[12]))
             {
-                //property = new PropertyData() { Name = "ProductSoldOut", Value = bool.Parse(columns[12]) };
                 property = CreateBoolProperty("ProductSoldOut", columns[12]);
                 productData.Properties.Add(property);
             }
             
             return productData;
         }
-
-        private PropertyData CreateIntProperty(string name, string data)
-        {
-            return new PropertyData
-            {
-                Name = name,
-                Value = int.Parse(data)
-            };
-        }
-
-        private PropertyData CreateStringProperty(string name, string data)
-        {
-            return new PropertyData
-            {
-                Name = name,
-                Value = data
-            };
-        }
-
-        private PropertyData CreateBoolProperty(string name, string data)
-        {
-            return new PropertyData
-            {
-                Name = name,
-                Value = bool.Parse(data)
-            };
-        }
-        //public object Read(Stream fileStream)
-        //{
-        //    List<ProductData> products = new List<ProductData>();
-        //    using (StreamReader streamReader = new StreamReader(fileStream))
-        //    {               
-        //        while (!streamReader.EndOfStream)
-        //        {
-        //            ProductData productData = new ProductData();
-        //            string[] columns = new string[14];
-        //            columns = streamReader.ReadLine().Split(";");
-
-
-
-        //            productData.Id = columns[0];
-        //            productData.Name = columns[1];
-        //            if (!string.IsNullOrEmpty(columns[2]))
-        //                productData.DisplayName = columns[2];
-
-        //            productData.AvailableFrom = Convert.ToDateTime(columns[3]);
-
-        //            if (columns[4] != "")
-        //            {
-        //                productData.AvailableUntil = Convert.ToDateTime(columns[4]);
-        //            }
-
-        //            productData.UnitPrice.Amount = Convert.ToDecimal(columns[5]);
-        //            productData.UnitPrice.Currency = columns[6];
-
-        //            List<string> markets = columns[7].Split(',').ToList();
-        //            productData.AvailableInMarkets.AddRange(markets);
-
-        //            List<string> sizes = columns[8].Split(',').ToList();
-        //            productData.Sizes.AddRange(sizes);
-
-        //            productData.Properties.Add(new PropertyData { Name = "Description", Value = columns[9] });
-        //            if(columns.Length == 10) { productData.Properties.Add(new PropertyData { Name = "DelieveryNote", Value = columns[10] }); }              
-        //            if(columns.Length == 11) { productData.Properties.Add(new PropertyData { Name = "DeliveryFromDays", Value = columns[11] }); }
-        //            if(columns.Length == 12) { productData.Properties.Add(new PropertyData { Name = "DeliveryToDays", Value = columns[12] }); }                 
-        //            if(columns.Length == 13) { productData.Properties.Add(new PropertyData { Name = "ProductSoldOut", Value = columns[13] }); }
-        //            products.Add(productData);
-        //        }               
-        //    }
-        //    return products;
-        //}
-
-        //public void Write(Stream stream, object data)
-        //{
-        //    using (StreamWriter streamWriter = new StreamWriter(stream))
-        //    {
-        //        StringBuilder stringBuilder = new StringBuilder();
-        //        List<ProductData> products = new List<ProductData>();
-
-        //        foreach (var productData in products)
-        //        {
-        //            string markets = string.Join(',', productData.AvailableInMarkets);
-        //            string sizes = string.Join(',', productData.Sizes);
-        //            List<string> props = new List<string>();
-        //            foreach (PropertyData prop in productData.Properties)
-        //            {
-        //                props.Add(prop.Value.ToString());
-        //            }
-        //            string properties = string.Join(';', props);
-        //            var line = $"{productData.Id};{productData.Name};{productData.DisplayName};" +
-        //                $"{productData.AvailableFrom};{productData.AvailableUntil};" +
-        //                $"{productData.UnitPrice.Amount};{markets};" +
-        //                $"{sizes};{properties}";
-
-        //            stringBuilder.AppendLine(line);
-        //        }
-        //        streamWriter.Write(stringBuilder.ToString());
-        //    }
-        //}
-
-        //public void Write(Stream stream, object data)
-        //{
-        //    using (StreamWriter streamWriter = new StreamWriter(stream))
-        //    {
-        //        StringBuilder stringBuilder = new StringBuilder();
-        //        List<ProductData> products = new List<ProductData>();
-        //        products = data as List<ProductData>;
-
-        //        foreach (var productData in products)
-        //        {
-        //            string line = GetColumns(productData);
-        //            stringBuilder.AppendLine(line);
-        //        }
-        //        streamWriter.Write(stringBuilder.ToString());
-        //    }
-        //}
 
         public void Write(Stream stream, object data)
         {
@@ -298,13 +179,13 @@ namespace FileConverter.Data
             if (properties.ContainsKey("Description"))
             {
                 string cleaned = RemoveNewLine(properties["Description"].ToString());
-                result[8] = cleaned;/*properties["Description"].ToString(); */
+                result[8] = cleaned;
 
             }
             if (properties.ContainsKey("DelieveryNote"))    
             {
                 string cleaned = RemoveNewLine(properties["DelieveryNote"].ToString());
-                result[9] = cleaned;/*properties["DelieveryNote"].ToString();*/ 
+                result[9] = cleaned;
             }
             if (properties.ContainsKey("DeliveryFromDays")) { result[10] = properties["DeliveryFromDays"].ToString(); }
             if (properties.ContainsKey("DeliveryToDays"))   { result[11] = properties["DeliveryToDays"].ToString(); }
@@ -318,63 +199,32 @@ namespace FileConverter.Data
             string cleaned = input.Replace("\n", "|").Replace("\r", "");
             return cleaned;
         }
-        //private string[] GetColumns(ProductData productData)
-        //{
-        //    string[] column = new string[14];
 
-        //    column[0] = productData.Id;
-        //    column[1] = productData.Name;
-        //    column[2] = productData.DisplayName;
-        //    column[3] = productData.AvailableFrom.ToString("yyyy-MM-dd HH:mm:ss");
+        private PropertyData CreateIntProperty(string name, string data)
+        {
+            return new PropertyData
+            {
+                Name = name,
+                Value = int.Parse(data)
+            };
+        }
 
-        //    Dictionary<string, object> properties = productData.Properties.ToDictionary(x => x.Name, x => x.Value);
+        private PropertyData CreateStringProperty(string name, string data)
+        {
+            return new PropertyData
+            {
+                Name = name,
+                Value = data
+            };
+        }
 
-        //    if (properties.ContainsKey("AvailableUntil"))
-        //    {
-        //        column[4] = properties["AvailableUntil"].ToString();
-        //    }
-
-        //    if (properties.ContainsKey("UnitPrice"))
-        //    {
-        //        column[5] = properties["UnitPrice"].ToString();
-        //    }
-
-        //    if (properties.ContainsKey("AvailableInMarkets"))
-        //    {
-        //        column[7] = properties["AvailableInMarkets"].ToString();
-        //    }
-
-        //    if (properties.ContainsKey("Sizes"))
-        //    {
-        //        column[8] = properties["Sizes"].ToString();
-        //    }
-
-        //    if (properties.ContainsKey("Description"))
-        //    {
-        //        column[9] = properties["Description"] as string;
-        //    }
-
-        //    if (properties.ContainsKey("DelieveryNote"))
-        //    {
-        //        column[10] = properties["DelieveryNote"].ToString();
-        //    }
-
-        //    if (properties.ContainsKey("DelieveryFromDays"))
-        //    {
-        //        column[11] = properties["DelieveryFromDays"].ToString();
-        //    }
-
-        //    if (properties.ContainsKey("DelieveryToDays"))
-        //    {
-        //        column[12] = properties["DelieveryToDays"].ToString();
-        //    }
-
-        //    if (properties.ContainsKey("ProductSoldOut"))
-        //    {
-        //        column[13] = properties["ProductSoldOut"].ToString();
-        //    }
-
-        //    return column;
-        //}
+        private PropertyData CreateBoolProperty(string name, string data)
+        {
+            return new PropertyData
+            {
+                Name = name,
+                Value = bool.Parse(data)
+            };
+        }
     }
 }
