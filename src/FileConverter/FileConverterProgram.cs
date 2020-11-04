@@ -59,18 +59,19 @@ namespace FileConverter
 
                 if ((inputHandler != null) && (outputHandler != null))
                 {
-                    FileStream input = new FileStream(options.Input, FileMode.Open);
-                    FileStream output = new FileStream(options.Output, FileMode.Create);
+                    using (FileStream input = new FileStream(options.Input, FileMode.Open))
+                    {
+                        using (FileStream output = new FileStream(options.Output, FileMode.Create))
+                        {
+                            object deserializedData = inputHandler.Read(input);
+                            outputHandler.Write(output, deserializedData);
 
-                    object deserializedData = inputHandler.Read(input);
-                    outputHandler.Write(output, deserializedData);
-
-                    output.Close();
-                    input.Close();
+                            output.Close();
+                            input.Close();
+                        }                            
+                    }                    
                 }
-
-            }
-            
+            }            
         }
 
         static void Abort(IEnumerable<Error> errors)
