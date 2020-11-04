@@ -70,17 +70,25 @@ namespace FileConverter.Data
             }
 
             PropertyData property;           
-            if (!string.IsNullOrEmpty(columns[5])) // Om den är tom så blir det ThrowOverflowException
+            if (!string.IsNullOrEmpty(columns[5]))
             {
                 productData.UnitPrice.Amount = decimal.Parse(columns[5]);                
             }
             if (!string.IsNullOrEmpty(columns[6]))
             {
-                productData.AvailableInMarkets.Add(columns[6]);
+                var hold = columns[6].Split(",");
+                foreach (var el in hold)
+                {
+                    productData.AvailableInMarkets.Add(el);
+                }
             }
             if (!string.IsNullOrEmpty(columns[7]))
             {
-                productData.Sizes.Add(columns[7]);
+                var hold = columns[7].Split(",");
+                foreach (var el in hold)
+                {
+                    productData.Sizes.Add(el);
+                }             
             }                        
             if (!string.IsNullOrEmpty(columns[8]))
             {
@@ -94,20 +102,20 @@ namespace FileConverter.Data
             }
             if (!string.IsNullOrEmpty(columns[10]))
             {
-                property = new PropertyData() { Name = "DeliveryFromDays", Value = int.Parse(columns[10]) };
-                //property = CreateIntProperty("DeliveryFromDays", columns[10]); Provar att kringgå metoderna och bara lägga in direct i Value. Mer utförlig info från ett test nu.
-                productData.Properties.Add(property);
+                //property = new PropertyData() { Name = "DeliveryFromDays", Value = int.Parse(columns[10]) };
+                property = CreateIntProperty("DeliveryFromDays", columns[10]);
+               productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[11]))
             {
-                property = new PropertyData() { Name = "DeliveryToDays", Value = int.Parse(columns[11]) };
-                //property = CreateIntProperty("DeliveryToDays", columns[11]);
+                //property = new PropertyData() { Name = "DeliveryToDays", Value = int.Parse(columns[11]) };
+                property = CreateIntProperty("DeliveryToDays", columns[11]);
                 productData.Properties.Add(property);
             }
             if (!string.IsNullOrEmpty(columns[12]))
             {
-                property = new PropertyData() { Name = "ProductSoldOut", Value = bool.Parse(columns[12]) };
-                //property = CreateBoolProperty("ProductSoldOut", columns[12]);
+                //property = new PropertyData() { Name = "ProductSoldOut", Value = bool.Parse(columns[12]) };
+                property = CreateBoolProperty("ProductSoldOut", columns[12]);
                 productData.Properties.Add(property);
             }
             
@@ -269,8 +277,7 @@ namespace FileConverter.Data
                 { markets += "," + market; }
                 count++;
             }
-            //product.AvailableInMarkets.Clear();
-            //product.AvailableInMarkets.Add(markets);
+
             result[6] = markets;
 
             string sizes = "";
@@ -283,8 +290,7 @@ namespace FileConverter.Data
                 { sizes += "," + size; }
                 count++;
             }
-            //product.Sizes.Clear();
-            //product.AvailableInMarkets.Add(sizes);
+
             result[7] = sizes;
 
             Dictionary<string, object> properties = product.Properties.ToDictionary(x => x.Name, x => x.Value);
